@@ -1,0 +1,135 @@
+<DOCTYPE! html>
+  <html>
+
+  <head>
+    <title>Iterator</title>
+  </head>
+
+  <body>
+				<h1>Iterator</h1>
+<div id="biz-vis-container" style="width: 100%; height: 240px; background: grey; position: relative; border-radius: 4px; overflow: hidden; cursor: pointer; border: 1px solid #999;"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+<script>
+  const container = document.getElementById('biz-vis-container');
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color('grey'); 
+  
+  const camera = new THREE.PerspectiveCamera(35, container.clientWidth / container.clientHeight, 0.1, 1000);
+  const renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setSize(container.clientWidth, container.clientHeight);
+  container.appendChild(renderer.domElement);
+
+  const group = new THREE.Group();
+  scene.add(group);
+
+  // Synthesized data from about.html and summary.html
+  const dataMap = [
+    { name: "People", color: "#B0E0E6", msg: "Philosophy: Instinctual Morning. Management/Administration Genesis of onto schools of ideology (8). We use People, Intuitions, and Discovery to achieve Calmness through Social Justice. This makes the world better by grounding human intuition in universal peace." },
+    { name: "DEI", color: "#FF69B4", msg: "Philosophy: Instinctual Morning. Management/Administration Genesis of Naturalistic skeletal interfaces. We use DEI Experiences and Initiation to uphold Basic Human Dignity. This makes the world better by ensuring fame and natural growth for every individual." },
+    { name: "Communication", color: "#708090", msg: "Philosophy: Instinctual Morning. Management/Administration Genesis at the delta interface. We use Communication Perspectives and Formation to address Empathic Pain through Civil Rights Advocacy. This makes the world better by bridging communication gaps with empathy." },
+    { name: "Customer", color: "#FF0000", msg: "Management: Investigative low theta axio schools (9). We analyze Customer Presuppositions to resolve Anger through Humanitarian Logistics. This makes the world better by optimizing resources for global wellbeing and procreative stakeholder interests." },
+    { name: "Compliance", color: "#2F4F4F", msg: "Management: Investigative low theta axio schools (9). We use Compliance Worldviews and Understanding to address Fear through Voter Engagement. This makes the world better by securing the sacral and reproductive wellbeing of global citizens." },
+    { name: "Legal", color: "#6B8E23", msg: "Management: Investigative low theta axio schools (9). We navigate Legal Paradigms and Requirements to resolve Disgust through Emergency Crisis Management. This makes the world better by providing existential legal structures during global disasters." },
+    { name: "Learning", color: "#FFD700", msg: "Administration: Readiness high theta epistime schools (1). We use Learning Arguments and Allocation to find Satisfaction through Animal Rights and Protection. This makes the world better by linguistic and cultural advancement of planetary compassion." },
+    { name: "Strategy", color: "#FF4500", msg: "Administration: Readiness high theta epistime schools (1). We use Strategy, Thesises, and Planning to inspire Awe through Legal Justice Reform. This makes the world better by creating structured, fair frameworks for global governance." },
+    { name: "Executive", color: "#FFA500", msg: "Administration: Readiness high theta epistime schools (1). We use Executive Frameworks and Mitigation to spark Excitement through Political Governance. This makes the world better by digestive data class efficiency in leadership for families." },
+    { name: "Brand", color: "#A0522D", msg: "Art: Affective low alpha Yang Evening. Revenue/Purchasing Model for literary genres (2). We use Brand Motifs and Prototyping for Interest in Cultural Heritage. This makes the world better by interpersonal communal preservation of human history." },
+    { name: "Trust", color: "#F8F8FF", msg: "Art: Affective low alpha Yang Evening. Revenue/Purchasing Model for relationships. We use Trust Perceptions and Design to create Surprise through Creative Advocacy. This makes the world better by heart and circulatory integrity in global partnerships." },
+    { name: "Reputation", color: "#E0FFFF", msg: "Art: Affective low alpha Yang Evening. Revenue/Purchasing Model deployment. We use Reputation and Emotions to implement Relief through Youth Mentorship. This makes the world better by affective stabilization of the next generation." },
+    { name: "HR", color: "#0000CD", msg: "Purchasing: Audit medium alpha performing genres (3). We use HR Principles and Validation to address Sadness through Mental Health and Well-being. This makes the world better by securing the bodily-kinesthetic and occupational wealth of humanity." },
+    { name: "Accounting", color: "#BC8F8F", msg: "Purchasing: Audit medium alpha performing genres (3). We use Accounting Styles and Testing for Nostalgia through Veteran Reintegration. This makes the world better by respiratory and throat health for those who served our communities." },
+    { name: "Finance", color: "#DCDCDC", msg: "Purchasing: Audit medium alpha performing genres (3). We use Finance Feelings and Review to resolve Confusion through Early Childhood Development. This makes the world better by audit-level accuracy in the wealth of our children's futures." },
+    { name: "Storytelling", color: "#F08080", msg: "Revenue: Transfer high alpha Yang Evening visual genres (4). We use Storytelling Elements and Deployment for Adoration through Elderly Care. This makes the world better by musical and emotional youthfulness for our aging population." },
+    { name: "Marketing", color: "#FFC0CB", msg: "Revenue: Transfer high alpha Yang Evening visual genres (4). We use Marketing Pieces and Integration for Romance through Food Security. This makes the world better by third-eye nervous system components that eliminate world hunger." },
+    { name: "Sales", color: "#FFFF00", msg: "Revenue: Transfer high alpha Yang Evening visual genres (4). We use Sales Sensations and Release for Admiration through Community Social Services. This makes the world better by high alpha significance in the release of community aid." },
+    { name: "Restructuring", color: "#7CFC00", msg: "Science: Cognitive low beta Yin Night. R&D/Production Utility of natural complex systems (5). We use Restructuring Hypotheses and Documentation for Joy through Medical Innovation. This makes the world better by logical-mathematical endocrine knowledge." },
+    { name: "Transformation", color: "#000000", msg: "Science: Cognitive low beta Yin Night. R&D/Production Utility crown systems. We use Transformation Observations and Support to resolve Horror through STEM Research. This makes the world better by mental knowledge of procedural existence." },
+    { name: "Growth", color: "#D3D3D3", msg: "Science: Cognitive low beta Yin Night. R&D/Production Utility facts. We use Growth Facts and Evaluation to resolve Boredom through Environmental Science. This makes the world better by utility-focused evaluation of our planet's future." },
+    { name: "Security", color: "#4B0082", msg: "R&D: Revision high beta social complex systems (6). We use Security Axioms and Evolution for Entrancement through Higher Education. This makes the world better by intrapersonal and environmental soul protection of world knowledge." },
+    { name: "Information", color: "#EEE8AA", msg: "R&D: Revision high beta social complex systems (6). We use Information Theories and Feedback to resolve Anxiety through Economic Policy. This makes the world better by muscular and domain career stability for all." },
+    { name: "Technology", color: "#D2691E", msg: "R&D: Revision high beta social complex systems (6). We use Technology Logic and Optimization for Craving through Urban Planning. This makes the world better by technological soul advancement in sustainable living." },
+    { name: "Supply Chain", color: "#FF7F50", msg: "Production: Endurance gamma formal complex systems (7). We use Supply Chain Theorems and Maintenance for Amusement through Public Health Systems. This makes the world better by spatial and spiritual spirit in global logistics." },
+    { name: "Sustainability", color: "#DB7093", msg: "Production: Endurance gamma formal complex systems (7). We use Sustainability Proofs and Enhancement for Awkwardness through Sustainable Tech. This makes the world better by architectural integumentary spirit in innovation." },
+    { name: "Operations", color: "#E6E6FA", msg: "Production: Endurance gamma formal complex systems (7). We use Operations Datum and Upgrades for Aesthetic Appreciation through Workforce Development. This makes the world better by self-preservation of global professional growth." }
+  ];
+
+  // Geometry: 27-gon Upside Down Frustum
+  const segments = 27;
+  const radTop = 6.2;
+  const radBottom = 2.2;
+  const height = 9.5;
+
+  dataMap.forEach((data, i) => {
+    const a1 = (i / segments) * Math.PI * 2;
+    const a2 = ((i + 1) / segments) * Math.PI * 2;
+    const mid = (a1 + a2) / 2;
+
+    const geo = new THREE.BufferGeometry();
+    const v = new Float32Array([
+      radBottom * Math.cos(a1), -height/2, radBottom * Math.sin(a1),
+      radBottom * Math.cos(a2), -height/2, radBottom * Math.sin(a2),
+      radTop * Math.cos(a2), height/2, radTop * Math.sin(a2),
+      radBottom * Math.cos(a1), -height/2, radBottom * Math.sin(a1),
+      radTop * Math.cos(a2), height/2, radTop * Math.sin(a2),
+      radTop * Math.cos(a1), height/2, radTop * Math.sin(a1)
+    ]);
+    geo.setAttribute('position', new THREE.BufferAttribute(v, 3));
+    geo.computeVertexNormals();
+
+    const mesh = new THREE.Mesh(geo, new THREE.MeshPhongMaterial({ color: data.color, side: THREE.DoubleSide, flatShading: true }));
+    mesh.userData = data;
+    group.add(mesh);
+
+    // Highly Readable Canvas Labels
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = 512; canvas.height = 128;
+    
+    ctx.font = 'Bold 48px Arial';
+    ctx.textAlign = 'center';
+    ctx.strokeStyle = 'white';
+    ctx.lineWidth = 6;
+    ctx.strokeText(data.name, 256, 80);
+    ctx.fillStyle = 'DimGray'; 
+    ctx.fillText(data.name, 256, 80);
+
+    const tex = new THREE.CanvasTexture(canvas);
+    const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex }));
+    sprite.position.set(radTop * 1.12 * Math.cos(mid), height/2 + 0.6, radTop * 1.12 * Math.sin(mid));
+    sprite.scale.set(4, 1, 1);
+    group.add(sprite);
+  });
+
+  const light = new THREE.PointLight(0xffffff, 1.2, 100);
+  light.position.set(10, 15, 10);
+  scene.add(light);
+  scene.add(new THREE.AmbientLight(0xffffff, 0.75));
+  camera.position.set(0, 6, 19);
+
+  const raycaster = new THREE.Raycaster();
+  const mouse = new THREE.Vector2();
+
+  container.addEventListener('click', (e) => {
+    const rect = container.getBoundingClientRect();
+    mouse.x = ((e.clientX - rect.left) / container.clientWidth) * 2 - 1;
+    mouse.y = -((e.clientY - rect.top) / container.clientHeight) * 2 + 1;
+    raycaster.setFromCamera(mouse, camera);
+    const intersects = raycaster.intersectObjects(group.children);
+    const found = intersects.find(o => o.object.type === "Mesh");
+    if (found) alert(found.object.userData.msg);
+  });
+
+  function animate() {
+    requestAnimationFrame(animate);
+    // Rotating CLOCKWISE
+    group.rotation.y -= 0.0035; 
+    renderer.render(scene, camera);
+  }
+  animate();
+</script>
+
+  </body>
+
+  </html>
