@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Iterator</title>
+</head>
+<body>
+        <h6>Sierpinski Triangle Serialization</h6>
+<div id="biz-vis-container" style="width: 100%; height: 400px; background: #050508; position: relative; border-radius: 4px; overflow: hidden; cursor: pointer; border: 1px solid #333;"></div>
+    </div>
+<script type="module">
+    import * as THREE from 'https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.module.js';
+
+    const rowData = [
+        // TOP CLUSTER
+        { r1: "Diversifier", r2: "Equifier", r3: "Inclusifier", f: "Variance", p: "Affiliation", c: "Deduction", i: "Relativism", pos: "Fusion", neg: "Fracture" },
+        { r1: "Talent Curator", r2: "Bond Mediator", r3: "Workforce Planner", f: "Foundation", p: "Inquiry", c: "Enunciation", i: "Relativism", pos: "Unity", neg: "Erosion" },
+        { r1: "Signal Herald", r2: "Voice Guardian", r3: "Linkage Expert", f: "Orb", p: "Promotion", c: "Integration", i: "Relativism", pos: "Resonance", neg: "Noise" },
+        { r1: "Rule Monitor", r2: "Duty Warden", r3: "Ethics Sentinel", f: "Extent", p: "Vigor", c: "Nimbleness", i: "Polytheism", pos: "Concord", neg: "Violation" },
+        { r1: "User Successor", r2: "Buyer Guide", r3: "Patron Pilot", f: "Holding", p: "Empathy", c: "Measurement", i: "Polytheism", pos: "Devotion", neg: "Severance" },
+        { r1: "Statute Advisor", r2: "Code Jurist", r3: "Defense Lead", f: "Structure", p: "Exacting", c: "Tact", i: "Polytheism", pos: "Immunity", neg: "Liability" },
+        { r1: "Aim Designer", r2: "Path Scouter", r3: "Goal Navigator", f: "Span", p: "Accord", c: "Anticipation", i: "Train Trolley Dilemmas", pos: "Agility", neg: "Wandering" },
+        { r1: "Wisdom Builder", r2: "Growth Mentor", r3: "Skill Catalyst", f: "Surface", p: "Elasticity", c: "Expertise", i: "Train Trolley Dilemmas", pos: "Expansion", neg: "Atrophy" },
+        { r1: "Head Officer", r2: "Chief Aide", r3: "Core Principal", f: "Conduit", p: "Drive", c: "Control", i: "Train Trolley Dilemmas", pos: "Authority", neg: "Stall" },
+
+        // BOTTOM-RIGHT CLUSTER
+        { r1: "Safety Chief", r2: "Data Warden", r3: "Secret Keeper", f: "Gradient", p: "Loyalty", c: "Rigor", i: "Stories", pos: "Solidity", neg: "Collapse" },
+        { r1: "Myth Maker", r2: "Script Author", r3: "Image Artist", f: "Base", p: "Novelty", c: "Clarity", i: "Stories", pos: "Meaning", neg: "Jarring" },
+        { r1: "Status Ranger", r2: "Public Face", r3: "Honor Guard", f: "Field", p: "Support", c: "Blending", i: "Stories", pos: "Prestige", neg: "Stain" },
+        { r1: "Sum Auditor", r2: "Book Keeper", r3: "Value Checker", f: "Scale", p: "Flow", c: "Swiftness", i: "Music", pos: "Accuracy", neg: "Deficit" },
+        { r1: "Labor Partner", r2: "Staff Guide", r3: "Pay Advisor", f: "Resource", p: "Kindness", c: "Weighting", i: "Music", pos: "Harmony", neg: "Clash" },
+        { r1: "Wealth Pilot", r2: "Sum Planner", r3: "Asset Guard", f: "Border", p: "Detail", c: "Grace", i: "Music", pos: "Growth", neg: "Drain" },
+        { r1: "Icon Head", r2: "Market Scout", r3: "Ad Director", f: "Term", p: "Balance", c: "Outlook", i: "Games", pos: "Inbound", neg: "Fading" },
+        { r1: "Gain Force", r2: "Scale Pilot", r3: "New Driver", f: "Portal", p: "Toughness", c: "Skill", i: "Games", pos: "Velocity", neg: "Slump" },
+        { r1: "Sales Leader", r2: "Lead Finder", r3: "Closing Pro", f: "Stream", p: "Desire", c: "Order", i: "Games", pos: "Closing", neg: "Loss" },
+
+        // BOTTOM-LEFT CLUSTER
+        { r1: "Shift Lead", r2: "Change Guide", r3: "New Modeler", f: "Range", p: "Duty", c: "Proof", i: "Quantum Physics", pos: "Lean", neg: "Waste" },
+        { r1: "Build Engineer", r2: "Code Maker", r3: "Web Architect", f: "Setting", p: "Zest", c: "Verbal", i: "Quantum Physics", pos: "Speed", neg: "Bugs" },
+        { r1: "Pivot Agent", r2: "Modern Lead", r3: "New Catalyst", f: "Region", p: "Mission", c: "Binding", i: "Quantum Physics", pos: "Modern", neg: "Legacy" },
+        { r1: "Wall Guard", r2: "Lock Keeper", r3: "Sentry Lead", f: "Scope", p: "Force", c: "Action", i: "Joint Cooperatives", pos: "Shield", neg: "Breach" },
+        { r1: "Flow Manager", r2: "Line Checker", r3: "Task Pilot", f: "Stock", p: "Care", c: "Sums", i: "Joint Cooperatives", pos: "Flow", neg: "Jam" },
+        { r1: "Fact Curator", r2: "Data Scout", r3: "Detail Head", f: "Grid", p: "Strict", c: "Parley", i: "Joint Cooperatives", pos: "Insight", neg: "Vague" },
+        { r1: "Life Ranger", r2: "Earth Lead", r3: "Future Guard", f: "Track", p: "Purpose", c: "Rules", i: "Work Mechanisms", pos: "Renew", neg: "Drought" },
+        { r1: "Route Finder", r2: "Buy Master", r3: "Cargo Pro", f: "Line", p: "Unity", c: "Vision", i: "Work Mechanisms", pos: "Supply", neg: "Gap" },
+        { r1: "Site Scout", r2: "Map Planner", r3: "Dock Lead", f: "Point", p: "Hardy", c: "Art", i: "Work Mechanisms", pos: "Ready", neg: "Halt" }
+    ];
+
+    const container = document.getElementById('biz-vis-container');
+    container.style.height = container.clientWidth + 'px';
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x0a0a0c);
+    const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(container.clientWidth, container.clientWidth);
+    container.appendChild(renderer.domElement);
+
+    const triangleGroup = new THREE.Group();
+    scene.add(triangleGroup);
+
+    function getProgressionPos(index, totalScale) {
+        let x = 0, y = 0;
+        const cluster = Math.floor(index / 9);
+        const triplet = Math.floor((index % 9) / 3);
+        const local = index % 3;
+        const scales = [totalScale/2, totalScale/4, totalScale/8];
+        const indices = [cluster, triplet, local];
+        indices.forEach((val, i) => {
+            const s = scales[i];
+            const h = (s * Math.sqrt(3)) / 2;
+            if (val === 0) { y += h / 1.5; } 
+            else if (val === 1) { x += s / 2; y -= h / 3; } 
+            else { x -= s / 2; y -= h / 3; }
+        });
+        return { x, y };
+    }
+
+    function createTriTexture(data) {
+        const canvas = document.createElement('canvas');
+        canvas.width = 1024; canvas.height = 1024;
+        const ctx = canvas.getContext('2d');
+
+        ctx.beginPath();
+        ctx.moveTo(512, 40); ctx.lineTo(1000, 920); ctx.lineTo(24, 920); ctx.closePath();
+        ctx.fillStyle = '#111113'; ctx.fill();
+        ctx.strokeStyle = '#00f3ff'; ctx.lineWidth = 18; ctx.stroke();
+        ctx.textAlign = "center";
+        
+        // Lines 1-3: Roles
+        ctx.fillStyle = '#ffffff'; ctx.font = '36px Arial';
+        ctx.fillText(data.r1, 512, 230);
+        ctx.fillText(data.r2, 512, 280);
+        ctx.fillText(data.r3, 512, 330);
+
+        // Lines 4-6: Mechanics
+        ctx.fillStyle = '#bbbbbb'; ctx.font = '30px Arial';
+        ctx.fillText(`FOCUS: ${data.f}`, 512, 405);
+        ctx.fillText(`PASSION: ${data.p}`, 512, 455);
+        ctx.fillText(`COMPETENCY: ${data.c}`, 512, 505);
+
+        // Line 7: Interest
+        ctx.fillStyle = '#ffcc00'; ctx.font = 'bold 44px Arial';
+        ctx.fillText(data.i, 512, 600);
+
+        // Line 8: Positive
+        ctx.fillStyle = '#00ff88'; ctx.font = 'bold 36px Monospace';
+        ctx.fillText("(+) " + data.pos, 512, 710);
+
+        // Line 9: Negative
+        ctx.fillStyle = '#ff4444'; ctx.font = 'bold 36px Monospace';
+        ctx.fillText("(-) " + data.neg, 512, 790);
+
+        return new THREE.CanvasTexture(canvas);
+    }
+
+    const positions = [];
+    const SCALE = 52;
+    rowData.forEach((row, i) => {
+        const pos = getProgressionPos(i, SCALE);
+        positions.push(new THREE.Vector3(pos.x, pos.y, 0));
+        const geometry = new THREE.PlaneGeometry(7.8, 7.8);
+        const material = new THREE.MeshBasicMaterial({ map: createTriTexture(row), transparent: true, alphaTest: 0.1 });
+        const tri = new THREE.Mesh(geometry, material);
+        tri.position.set(pos.x, pos.y, 0);
+        triangleGroup.add(tri);
+    });
+
+    let currentIdx = -1;
+    const overviewZ = 65;
+    camera.position.set(0, 0, overviewZ);
+
+    container.addEventListener('mousedown', (e) => {
+        if (e.button === 0) {
+            currentIdx = (currentIdx + 1) % 28;
+            if (currentIdx === 27) currentIdx = -1;
+        }
+    });
+
+    function animate() {
+        requestAnimationFrame(animate);
+        const target = (currentIdx === -1) ? new THREE.Vector3(0, 0, overviewZ) : new THREE.Vector3(positions[currentIdx].x, positions[currentIdx].y, 14);
+        camera.position.lerp(target, 0.08);
+        renderer.render(scene, camera);
+    }
+    animate();
+</script>  
+    <div class="footer">
+        <footer>Solo Trio Studio</footer>
+    </div>
+</body>
+</html>
